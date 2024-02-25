@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/drawer_layout"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start"
+    tools:context=".Dashboard">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:elevation="4dp"
+        android:background="@drawable/toolbar_header">
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:weightSum="6"
+             android:orientation="horizontal">
+             <ImageView
+                 android:layout_width="0dp"
+                 android:layout_weight="2"
+                 android:src="@drawable/money"
+                 android:layout_height="match_parent"
+                 android:contentDescription="@string/dashboard_text" />
+             <TextView
+                 android:layout_width="0dp"
+                 android:layout_weight="4"
+                 android:layout_height="match_parent"
+                 android:gravity="center"
+                 android:textSize="36sp"
+                 android:text="@string/dashboard_text"/>
+         </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    </LinearLayout>
+
+
+   <com.google.android.material.navigation.NavigationView
+       android:layout_width="wrap_content"
+       android:layout_height="match_parent"
+       android:layout_gravity="start"
+       android:id="@+id/nav_view"
+       app:headerLayout="@layout/nav_header"
+       app:menu="@menu/drawer_menu"/>
+
+
+
+
+
+
+
+
+</androidx.drawerlayout.widget.DrawerLayout>
