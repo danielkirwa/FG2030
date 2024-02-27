@@ -7,6 +7,7 @@
     android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
+    android:background="@drawable/bg3"
     tools:context=".Dashboard">
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,6 +42,15 @@
                  android:text="@string/dashboard_text"/>
          </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
+        <Button
+            android:id="@+id/btn_open_transaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:layout_margin="24dp"
+            android:drawableStart="@drawable/transaction2_24"
+            android:backgroundTint="@color/blue"
+            android:text="Do Transaction"/>
 
     </LinearLayout>
 
@@ -48,16 +58,9 @@
    <com.google.android.material.navigation.NavigationView
        android:layout_width="wrap_content"
        android:layout_height="match_parent"
-       android:layout_gravity="start"
+       android:layout_gravity="end"
        android:id="@+id/nav_view"
        app:headerLayout="@layout/nav_header"
        app:menu="@menu/drawer_menu"/>
-
-
-
-
-
-
-
 
 </androidx.drawerlayout.widget.DrawerLayout>

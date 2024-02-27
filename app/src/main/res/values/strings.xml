@@ -18,4 +18,8 @@
     </string>
     <string name="dashboard_text">Dashboard</string>
     <string name="bal">Ksh. 56700</string>
+    <string name="transaction">Transaction</string>
+    <string name="icon_illustration">Icon illustration</string>
+    <string name="defaultksh">Ksh. 0.00</string>
+    <string name="enter_value">Enter value ...</string>
 </resources>
