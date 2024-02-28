@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +17,7 @@ import java.util.Calendar;
 
 public class Transaction extends AppCompatActivity {
 EditText pickDate;
-CardView inTransaction, outTransaction;
+CardView inTransaction, outTransaction, openCategory;
 Button saveTransaction;
 int transactionTypeState = 0;
     @Override
@@ -27,6 +28,7 @@ int transactionTypeState = 0;
         inTransaction = findViewById(R.id.in_transaction);
         outTransaction = findViewById(R.id.out_transaction);
         saveTransaction = findViewById(R.id.btn_save_transaction);
+        openCategory = findViewById(R.id.btn_open_category);
 
 
 
@@ -43,6 +45,13 @@ int transactionTypeState = 0;
             public void onClick(View v) {
                 transactionTypeState = 2;
                 saveTransaction.setBackgroundTintList(ContextCompat.getColorStateList(Transaction.this, R.color.crimson));
+            }
+        });
+        openCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentOpenCategories = new Intent(Transaction.this,CreatePurpose.class);
+                startActivity(intentOpenCategories);
             }
         });
 
