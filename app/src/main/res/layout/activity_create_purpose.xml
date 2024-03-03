@@ -84,7 +84,7 @@
                 android:layout_weight="1">
                 <EditText
                     android:id="@+id/txt_transaction_item_name"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Item Name"
@@ -106,7 +106,7 @@
                 android:layout_weight="1">
                 <EditText
                     android:id="@+id/txt_transaction_item_code"
-                    android:inputType="datetime"
+                    android:inputType="text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Item Code"
