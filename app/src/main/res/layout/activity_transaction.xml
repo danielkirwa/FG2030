@@ -160,9 +160,9 @@
                 <Spinner
                     android:id="@+id/transaction_item"
                     android:layout_width="match_parent"
+                    android:layout_height="48dp"
                     android:background="@drawable/my_input"
-                    android:padding="8dp"
-                    android:layout_height="48dp"/>
+                    android:padding="8dp" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
