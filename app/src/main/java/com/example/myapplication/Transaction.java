@@ -11,11 +11,14 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,8 +34,11 @@ EditText pickDate;
 CardView inTransaction, outTransaction, openCategory;
 Button saveTransaction;
 Spinner selectPurpose;
+EditText amount,description;
     List<Record> recordList = new ArrayList<>();
+    List<String> purposeList = new ArrayList<>();
 int transactionTypeState = 0;
+String typeOfTransaction = "Not selected";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,8 @@ int transactionTypeState = 0;
         saveTransaction = findViewById(R.id.btn_save_transaction);
         openCategory = findViewById(R.id.btn_open_category);
         selectPurpose = findViewById(R.id.transaction_item);
+        amount = findViewById(R.id.txt_transaction_amount);
+        description = findViewById(R.id.txt_transaction_description);
 
 
 // call methods here
@@ -52,6 +60,7 @@ int transactionTypeState = 0;
             @Override
             public void onClick(View v) {
                 transactionTypeState = 1;
+                typeOfTransaction = "Transaction In";
                saveTransaction.setBackgroundTintList(ContextCompat.getColorStateList(Transaction.this, R.color.green));
             }
         });
@@ -59,6 +68,7 @@ int transactionTypeState = 0;
             @Override
             public void onClick(View v) {
                 transactionTypeState = 2;
+                typeOfTransaction = "Transaction Out";
                 saveTransaction.setBackgroundTintList(ContextCompat.getColorStateList(Transaction.this, R.color.crimson));
             }
         });
@@ -77,12 +87,14 @@ int transactionTypeState = 0;
               // check state of the transaction type
                 if (transactionTypeState == 0){
                     showMessage("Transaction Not Selected","Select transaction");
-                } else if (transactionTypeState == 2) {
-                    showMessage("Transaction Out","Transaction type outgoing amount");
-                } else if (transactionTypeState == 1) {
-                    showMessage("Transaction In","Transaction type incoming amount");
-                }else {
-                    showMessage("Unknown Error","Transaction type error try selecting again");
+                } else {
+                     // check empty fileds
+                    if (selectPurpose.getSelectedItemPosition() == 0 || amount.getText().toString().trim().isEmpty() || pickDate.getText().toString().trim().isEmpty() || description.getText().toString().trim().isEmpty()) {
+                        showMessage("Error", "Please select purpose , Description , amount or Date ");
+                    } else {
+                       saveTransactionToDatabase();
+                    }
+
                 }
             }
         });
@@ -91,6 +103,21 @@ int transactionTypeState = 0;
             @Override
             public void onClick(View v) {
                 showDateTimePicker();
+            }
+        });
+
+
+
+         // get selected purpose details
+        selectPurpose.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String transactionPurpose = purposeList.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -169,8 +196,10 @@ int transactionTypeState = 0;
                 }
 
                 // Create a list of purposes to display in the Spinner
-                List<String> purposeList = new ArrayList<>();
+                    // add default select placeholder
+                purposeList.add("Select Purpose");
                 for (Record record : recordList) {
+
                     purposeList.add(record.getPurpose());
                 }
 
@@ -207,6 +236,89 @@ int transactionTypeState = 0;
 
         // Add getter and setter methods for each field
         // Getter and setter methods...
+    }
+
+     // method to save
+     private void saveTransactionToDatabase() {
+         long currentTimestamp = System.currentTimeMillis();
+         String transType = typeOfTransaction.toString();
+         String transPurpose = selectPurpose.getSelectedItem().toString();
+         String transDate = pickDate.getText().toString();
+         String transAmount = amount.getText().toString();
+         String transDescription = description.getText().toString();
+
+         FirebaseDatabase database = FirebaseDatabase.getInstance();
+         DatabaseReference myRef = database.getReference("TransactionDone/" +transType).child(String.valueOf(currentTimestamp)); // Change here
+
+         myRef.setValue(new Transaction.TransactionDone(transType, transDate, transAmount, transPurpose,transDescription))
+                 .addOnSuccessListener(new OnSuccessListener<Void>() {
+                     @Override
+                     public void onSuccess(Void aVoid) {
+                         // Data successfully saved
+                         showMessage("Success","New Transaction saved");
+                         resetForm();
+                     }
+                 })
+                 .addOnFailureListener(new OnFailureListener() {
+                     @Override
+                     public void onFailure(@NonNull Exception e) {
+                         // Error saving data
+                         showMessage("Failed", "Failed to save transaction there was an error");
+                     }
+                 });
+     }
+
+    // create transaction helper
+
+    private static class TransactionDone {
+        private  String transactionType;
+        private  String transactionDate;
+        private  String transactionAmount;
+        private  String transactionPurpose;
+        private String transactionDescription;
+
+        public TransactionDone(String transactionType, String transactionDate, String transactionAmount, String transactionPurpose, String transactionDescription) {
+            this.transactionType = transactionType;
+            this.transactionDate = transactionDate;
+            this.transactionAmount = transactionAmount;
+            this.transactionPurpose = transactionPurpose;
+            this.transactionDescription = transactionDescription;
+        }
+
+        public String getTransactionType() {
+            return transactionType;
+        }
+
+        public String getTransactionDate() {
+            return transactionDate;
+        }
+
+        public String getTransactionAmount() {
+            return transactionAmount;
+        }
+
+        public String getTransactionPurpose() {
+            return transactionPurpose;
+        }
+
+        public String getTransactionDescription() {
+            return transactionDescription;
+        }
+
+
+
+
+    }
+
+    // form reset
+    public void resetForm(){
+        amount.setText("");
+        description.setText("");
+        pickDate.setText("");
+        selectPurpose.setSelection(0);
+        transactionTypeState = 0;
+        typeOfTransaction = "Not selected";
+        saveTransaction.setBackgroundTintList(ContextCompat.getColorStateList(Transaction.this, R.color.blue));
     }
 
 }
