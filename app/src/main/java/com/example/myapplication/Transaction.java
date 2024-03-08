@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,10 +28,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Transaction extends AppCompatActivity {
 EditText pickDate;
+TextView amountIn,amountOut;
 CardView inTransaction, outTransaction, openCategory;
 Button saveTransaction;
 Spinner selectPurpose;
@@ -51,10 +55,13 @@ String typeOfTransaction = "Not selected";
         selectPurpose = findViewById(R.id.transaction_item);
         amount = findViewById(R.id.txt_transaction_amount);
         description = findViewById(R.id.txt_transaction_description);
+        amountIn = findViewById(R.id.lb_total_amount_in);
+        amountOut = findViewById(R.id.lb_total_amount_out);
 
 
 // call methods here
         selectPurposeForDb();
+        getAllTransactionTotals();
 
         inTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,14 +255,57 @@ String typeOfTransaction = "Not selected";
          String transDescription = description.getText().toString();
 
          FirebaseDatabase database = FirebaseDatabase.getInstance();
-         DatabaseReference myRef = database.getReference("TransactionDone/" +transType).child(String.valueOf(currentTimestamp)); // Change here
+         DatabaseReference transactionRef = database.getReference("TransactionDone/" + transType)
+                 .child(String.valueOf(currentTimestamp));
 
-         myRef.setValue(new Transaction.TransactionDone(transType, transDate, transAmount, transPurpose,transDescription))
+         DatabaseReference accountRef = database.getReference("Account");
+
+
+         DatabaseReference transactionInTotalRef = accountRef.child("TransactionInTotal");
+         DatabaseReference transactionOutTotalRef = accountRef.child("TransactionOutTotal");
+
+         // Fetch the current value of TransactionInTotal and update it
+         transactionInTotalRef.addListenerForSingleValueEvent(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                 long transactionInTotal = dataSnapshot.exists() ? dataSnapshot.getValue(Long.class) : 0;
+                 transactionInTotal += transType.equals("Transaction In") ? Long.parseLong(transAmount) : 0;
+
+                 // Update TransactionInTotal node with new value
+                 transactionInTotalRef.setValue(transactionInTotal);
+             }
+
+             @Override
+             public void onCancelled(@NonNull DatabaseError databaseError) {
+                 showMessage("Error", "Failed to read data.");
+             }
+         });
+
+         // Fetch the current value of TransactionOutTotal and update it
+         transactionOutTotalRef.addListenerForSingleValueEvent(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                 long transactionOutTotal = dataSnapshot.exists() ? dataSnapshot.getValue(Long.class) : 0;
+                 transactionOutTotal += transType.equals("Transaction Out") ? Long.parseLong(transAmount) : 0;
+
+                 // Update TransactionOutTotal node with new value
+                 transactionOutTotalRef.setValue(transactionOutTotal);
+             }
+
+             @Override
+             public void onCancelled(@NonNull DatabaseError databaseError) {
+                 showMessage("Error", "Failed to read data.");
+             }
+         });
+
+         // Save TransactionDone
+         Transaction.TransactionDone transactionDone = new Transaction.TransactionDone(transType, transDate, transAmount, transPurpose, transDescription);
+         transactionRef.setValue(transactionDone)
                  .addOnSuccessListener(new OnSuccessListener<Void>() {
                      @Override
                      public void onSuccess(Void aVoid) {
                          // Data successfully saved
-                         showMessage("Success","New Transaction saved");
+                         showMessage("Success", "New Transaction saved");
                          resetForm();
                      }
                  })
@@ -267,6 +317,12 @@ String typeOfTransaction = "Not selected";
                      }
                  });
      }
+
+
+
+
+
+    //
 
     // create transaction helper
 
@@ -308,6 +364,44 @@ String typeOfTransaction = "Not selected";
 
 
 
+    }
+
+    // get accumulative amount
+    public  void getAllTransactionTotals(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference accountRef = database.getReference("Account");
+
+// Retrieve TransactionInTotal value from Firebase and set it to the TextView
+        accountRef.child("TransactionInTotal").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Long transactionInTotal = dataSnapshot.getValue(Long.class);
+                if (transactionInTotal != null) {
+                    amountIn.setText(String.valueOf(transactionInTotal));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                showMessage("Error", "Failed to read TransactionInTotal value.");
+            }
+        });
+
+// Retrieve TransactionOutTotal value from Firebase and set it to the TextView
+        accountRef.child("TransactionOutTotal").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Long transactionOutTotal = dataSnapshot.getValue(Long.class);
+                if (transactionOutTotal != null) {
+                    amountOut.setText(String.valueOf(transactionOutTotal));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                showMessage("Error", "Failed to read TransactionOutTotal value.");
+            }
+        });
     }
 
     // form reset

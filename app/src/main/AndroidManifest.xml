@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.myapplication"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.myapplication">
 
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
@@ -15,6 +15,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
+        <activity
+            android:name=".InternalTransaction"
+            android:exported="false" />
+        <activity
+            android:name=".Lending"
+            android:exported="false"
+            android:label="@string/title_activity_lending"
+            android:theme="@style/Theme.MyApplication" />
         <activity
             android:name=".CreatePurpose"
             android:exported="false" />
