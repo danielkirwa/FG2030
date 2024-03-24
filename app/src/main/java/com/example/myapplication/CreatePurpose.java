@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,6 +34,9 @@ public class CreatePurpose extends AppCompatActivity {
 Spinner transaction_Category;
 Button savePurpose;
     private RecyclerView recyclerView;
+    ArrayList<Record> list;
+    PurposeAdapter purposeAdapter;
+    DatabaseReference databaseReference;
 
     EditText txtPurpose,txtPurposeCode,txtDescription;
     @Override
@@ -147,7 +151,7 @@ Button savePurpose;
     }
 
     // create purpose class to get data
-    private static class Purpose {
+    public static class Purpose {
         private String purpose;
         private String code;
         private String type;
@@ -191,12 +195,18 @@ Button savePurpose;
 
     // retriev data and put in a list
     public void selectPurposeForDb(){
+        list = new ArrayList<Record>();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        purposeAdapter = new PurposeAdapter(this,list);
+        recyclerView.setAdapter(purposeAdapter);
+
         // Retrieve the reference to the Firebase database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Purpose");
 
 // Attach a listener for retrieving data
         myRef.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Iterate through the records
@@ -210,8 +220,10 @@ Button savePurpose;
                     // Create a record object and add it to the list
                     Record record = new Record(purpose, code, type, description);
                     // Add the record to your list or adapter to display it in the UI
+                    list.add(record);
 
                 }
+                purposeAdapter.notifyDataSetChanged();
             }
 
 
@@ -224,6 +236,22 @@ Button savePurpose;
     }
 
     public class Record {
+        public String getPurpose() {
+            return purpose;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
         private String purpose;
         private String code;
         private String type;
