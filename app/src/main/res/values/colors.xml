@@ -5,5 +5,7 @@
     <color name="blue">#1E90FF</color>
     <color name="crimson">#f7313b</color>
     <color name="green">#009688</color>
+    <color name="lightBlue">#87CEFA</color>
+    <color name="lightCrimson"> #FF5A5F</color>
 
 </resources>

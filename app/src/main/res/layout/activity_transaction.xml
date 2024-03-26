@@ -246,15 +246,14 @@
         android:backgroundTint="@color/blue"
         android:text="Save Transaction"/>
 
-        <Button
-            android:id="@+id/btn_view_transaction"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_transaction"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:backgroundTint="@color/blue"
-            android:text="View Transaction"/>
+            android:layout_height="300dp"
+            android:background="@drawable/my_input"
+            android:layout_marginTop="16dp" />
+
+
 
 </LinearLayout>
 </ScrollView>
