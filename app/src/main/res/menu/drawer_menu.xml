@@ -32,7 +32,7 @@
             <item android:id="@+id/nav_dollar_account"
                 android:icon="@drawable/dollar_24"
                 android:title="Dollar Acount"/>
-            <item android:id="@+id/nav_comment"
+            <item android:id="@+id/nav_lending"
                 android:icon="@drawable/notes_24"
                 android:title="Lendings"/>
         </menu>

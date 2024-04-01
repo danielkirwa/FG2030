@@ -42,10 +42,15 @@ Button openTransaction;
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.nav_account) {
-                    Intent openAccountIntent = new Intent(Dashboard.this, Lending.class);
+                    Intent openAccountIntent = new Intent(Dashboard.this, Account.class);
                     startActivity(openAccountIntent);
                     return true;
-                } else if (itemId == R.id.nav_saving) {
+                } else if (itemId == R.id.nav_lending) {
+                    Intent openLending = new Intent(Dashboard.this, Lending.class);
+                    startActivity(openLending);
+                    return true;
+                }
+                else if (itemId == R.id.nav_saving) {
                     Intent openInvestment = new Intent(Dashboard.this, Beneficiary.class);
                     startActivity(openInvestment);
                     return true;
