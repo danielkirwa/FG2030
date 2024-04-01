@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -7,6 +7,10 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg4"
     tools:context=".Account">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -22,26 +26,40 @@
             android:weightSum="6"
             android:orientation="horizontal">
             <ImageView
+                android:id="@+id/show_create_account"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:src="@drawable/transaction_24"
+                android:src="@drawable/add_24"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/transaction" />
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="5"
+                android:layout_weight="4"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:textSize="24sp"
                 android:text="Accounts"/>
+            <ImageView
+                android:id="@+id/show_accounts"
+                android:layout_marginRight="8dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/balance_24"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/transaction" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
-
+    <LinearLayout
+        android:id="@+id/create_account_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="24dp"
         android:orientation="horizontal">
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
@@ -159,4 +177,81 @@
         android:backgroundTint="@color/blue"
         android:text="Add Account"/>
 
-</LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/account_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:elevation="8dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/bankcard2"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/v_transaction_amount"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    android:text="2456733"
+                    android:textSize="24sp"
+                    android:gravity="center"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/v_transaction_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="Transaction In"
+                        android:textSize="24sp"
+                        android:gravity="center"/>
+                    <TextView
+                        android:id="@+id/v_transaction_purpose"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="Purpose"
+                        android:textColor="@color/blue"
+                        android:textSize="24sp"
+                        android:gravity="center"/>
+                    <TextView
+                        android:id="@+id/v_transaction_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="Date/time"
+                        android:textColor="@color/blue"
+                        android:textSize="24sp"
+                        android:gravity="center"/>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
