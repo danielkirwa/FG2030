@@ -55,6 +55,11 @@ Button openTransaction;
                     startActivity(openInvestment);
                     return true;
                 }
+                else if (itemId == R.id.nav_table_banking) {
+                    Intent openTBanking = new Intent(Dashboard.this, TBanking.class);
+                    startActivity(openTBanking);
+                    return true;
+                }
 
                 return true;
             }

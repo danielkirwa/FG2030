@@ -207,7 +207,7 @@
                     android:layout_weight="2"
                     android:layout_height="match_parent"
                     android:layout_margin="8dp"
-                    android:text="2456733"
+                    android:text="0.00"
                     android:textSize="24sp"
                     android:gravity="center"/>
                 <LinearLayout
@@ -220,7 +220,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:text="Transaction In"
+                        android:text="Account Name"
                         android:textSize="24sp"
                         android:gravity="center"/>
                     <TextView
@@ -228,19 +228,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:text="Purpose"
+                        android:text="1222XXXX123"
                         android:textColor="@color/blue"
                         android:textSize="24sp"
                         android:gravity="center"/>
-                    <TextView
-                        android:id="@+id/v_transaction_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text="Date/time"
-                        android:textColor="@color/blue"
-                        android:textSize="24sp"
-                        android:gravity="center"/>
+
 
 
                 </LinearLayout>
