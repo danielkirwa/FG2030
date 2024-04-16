@@ -169,7 +169,7 @@
         </androidx.cardview.widget.CardView>
     </LinearLayout>
     <Button
-        android:id="@+id/btn_save_transaction_item"
+        android:id="@+id/btn_open_new_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="24sp"
