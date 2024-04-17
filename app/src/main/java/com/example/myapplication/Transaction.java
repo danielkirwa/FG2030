@@ -28,19 +28,19 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Transaction extends AppCompatActivity {
 EditText pickDate;
 TextView amountIn,amountOut;
 CardView inTransaction, outTransaction, openCategory;
 Button saveTransaction;
-Spinner selectPurpose;
+Spinner selectPurpose,selectAccount;
 EditText amount,description;
     List<Record> recordList = new ArrayList<>();
     List<String> purposeList = new ArrayList<>();
+    List<RecordAccounts> accountsList = new ArrayList<RecordAccounts>();
+    List<String> listedAccounts = new ArrayList<>();
 int transactionTypeState = 0;
 String typeOfTransaction = "Not selected";
     @Override
@@ -57,11 +57,13 @@ String typeOfTransaction = "Not selected";
         description = findViewById(R.id.txt_transaction_description);
         amountIn = findViewById(R.id.lb_total_amount_in);
         amountOut = findViewById(R.id.lb_total_amount_out);
+        selectAccount = findViewById(R.id.transaction_account);
 
 
 // call methods here
         selectPurposeForDb();
         getAllTransactionTotals();
+        selectAccountsFromDb ();
 
         inTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,6 +226,39 @@ String typeOfTransaction = "Not selected";
         });
     }
 
+    public  void selectAccountsFromDb (){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference accountRef = database.getReference("Accounts");
+
+        accountRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot snapshot1 : snapshot.getChildren()){
+                    String accountsCodes = snapshot1.child("code").getValue(String.class);
+
+                    RecordAccounts record = new RecordAccounts(accountsCodes);
+                    accountsList.add(record);
+
+                }
+                listedAccounts.add("Select Account");
+                for (RecordAccounts recordAccounts : accountsList){
+                    listedAccounts.add(recordAccounts.getShortCode());
+                }
+                // adapter to spinner
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(Transaction.this, android.R.layout.simple_spinner_item,listedAccounts);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                selectAccount.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                showMessage("Clean", "No accounts created yet");
+
+            }
+        });
+
+    }
+
     public class Record {
         private String purpose;
         private String code;
@@ -243,6 +278,19 @@ String typeOfTransaction = "Not selected";
 
         // Add getter and setter methods for each field
         // Getter and setter methods...
+    }
+
+    // for storing selected data from database
+    public class RecordAccounts{
+        private String shortCode;
+
+        public RecordAccounts(String shortCode) {
+            this.shortCode = shortCode;
+        }
+
+        public String getShortCode() {
+            return shortCode;
+        }
     }
 
      // method to save
